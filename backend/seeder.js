@@ -31,7 +31,7 @@ async function main() {
 
         try {
 
-            for (let i = 0; i < 1000; i++) {
+            for (let i = 0; i < 10; i++) {
                 // const image = faker.image.avatar();
 
                 // const images = []
