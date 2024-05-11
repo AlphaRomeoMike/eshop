@@ -151,7 +151,7 @@ const Header = ({ activeHeading }) => {
             <Navbar active={activeHeading} />
           </div>
 
-          {/* categories */}
+          {/* // ? dropdown for select country / currency */}
           <div onClick={() => setCountryDropDown(!countryDropDown)}>
             <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
               <FaGlobeAmericas size={22} className="absolute top-5 left-2" />

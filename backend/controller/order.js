@@ -12,7 +12,15 @@ router.post(
   "/create-order",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
+      const {
+        cart,
+        shippingAddress,
+        user,
+        totalPrice,
+        paymentInfo,
+        currencyCode, // ? currencyCode for symbol
+        conversionRate, // ? conversion rate for calculation
+      } = req.body;
 
       //   group cart items by shopId
       const shopItemsMap = new Map();
@@ -35,6 +43,8 @@ router.post(
           user,
           totalPrice,
           paymentInfo,
+          currencyCode,
+          conversionRate,
         });
         orders.push(order);
       }
@@ -111,7 +121,7 @@ router.put(
       if (req.body.status === "Delivered") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
-        const serviceCharge = order.totalPrice * .10;
+        const serviceCharge = order.totalPrice * 0.1;
         await updateSellerInfo(order.totalPrice - serviceCharge);
       }
 
@@ -133,7 +143,7 @@ router.put(
 
       async function updateSellerInfo(amount) {
         const seller = await Shop.findById(req.seller.id);
-        
+
         seller.availableBalance = amount;
 
         await seller.save();

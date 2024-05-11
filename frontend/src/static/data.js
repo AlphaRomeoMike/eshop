@@ -260,7 +260,7 @@ export const categoriesData = [
   },
 ];
 
-// categories data
+// ? countries dropdown data
 export const countriesData = [
   {
     id: 1,
