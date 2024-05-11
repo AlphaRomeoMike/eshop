@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
-import { categoriesData, productData } from "../../static/data";
+import { categoriesData, countriesData, productData } from "../../static/data";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -9,13 +9,15 @@ import {
 } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
+import { FaGlobeAmericas } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
+import { fetchExchangeRates } from "../../redux/actions/currency";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -27,9 +29,11 @@ const Header = ({ activeHeading }) => {
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [countryDropDown, setCountryDropDown] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -50,6 +54,10 @@ const Header = ({ activeHeading }) => {
       setActive(false);
     }
   });
+
+  useEffect(() => {
+    dispatch(fetchExchangeRates());
+  }, []);
 
   return (
     <>
@@ -133,6 +141,7 @@ const Header = ({ activeHeading }) => {
                 <DropDown
                   categoriesData={categoriesData}
                   setDropDown={setDropDown}
+                  dropDownType="categories"
                 />
               ) : null}
             </div>
@@ -140,6 +149,30 @@ const Header = ({ activeHeading }) => {
           {/* navitems */}
           <div className={`${styles.noramlFlex}`}>
             <Navbar active={activeHeading} />
+          </div>
+
+          {/* categories */}
+          <div onClick={() => setCountryDropDown(!countryDropDown)}>
+            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+              <FaGlobeAmericas size={22} className="absolute top-5 left-2" />
+              <button
+                className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
+              >
+                Select Country
+              </button>
+              <IoIosArrowDown
+                size={20}
+                className="absolute right-2 top-4 cursor-pointer"
+                onClick={() => setCountryDropDown(!countryDropDown)}
+              />
+              {countryDropDown ? (
+                <DropDown
+                  categoriesData={countriesData}
+                  setDropDown={setCountryDropDown}
+                  dropDownType="currencies"
+                />
+              ) : null}
+            </div>
           </div>
 
           <div className="flex">
@@ -234,6 +267,7 @@ const Header = ({ activeHeading }) => {
               </span>
             </div>
           </div>
+
           {/* cart popup */}
           {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
 
