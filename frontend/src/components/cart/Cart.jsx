@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
+  const { currency } = useSelector((state) => state.currency);
   const dispatch = useDispatch();
 
   const removeFromCartHandler = (data) => {
@@ -17,7 +18,7 @@ const Cart = ({ setOpenCart }) => {
   };
 
   const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
+    (acc, item) => acc + item.qty * (currency?.rate * item.discountPrice),
     0
   );
 
@@ -79,7 +80,8 @@ const Cart = ({ setOpenCart }) => {
                   className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Checkout Now (USD${totalPrice})
+                    Checkout Now ({currency?.alphaCode}
+                    {totalPrice.toFixed(2)})
                   </h1>
                 </div>
               </Link>
@@ -93,7 +95,8 @@ const Cart = ({ setOpenCart }) => {
 
 const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   const [value, setValue] = useState(data.qty);
-  const totalPrice = data.discountPrice * value;
+  const { currency } = useSelector((state) => state.currency);
+  const totalPrice = currency?.rate * data.discountPrice * value;
 
   const increment = (data) => {
     if (data.stock < value) {
@@ -137,10 +140,12 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
         <div className="pl-[5px]">
           <h1>{data.name}</h1>
           <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.discountPrice} * {value}
+            {currency?.alphaCode}
+            {(currency?.rate * data.discountPrice).toFixed(2)} x {value}
           </h4>
           <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-            US${totalPrice}
+            {currency?.alphaCode}
+            {totalPrice.toFixed(2)}
           </h4>
         </div>
         <RxCross1
