@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
 import { useDispatch } from "react-redux";
-import { fetchExchangeRates } from "../../redux/actions/currency";
+import { fetchExchangeRate } from "../../redux/actions/currency";
 import { countriesData } from "../../static/data";
 
 const DropDown = ({
@@ -48,7 +48,7 @@ const DropDown = ({
             <div
               key={index}
               className={`${styles.noramlFlex}`}
-              onClick={() => dispatch(fetchExchangeRates(i?.subTitle))}
+              onClick={() => dispatch(fetchExchangeRate(i?.subTitle))}
             >
               <img
                 src={i.image_Url}

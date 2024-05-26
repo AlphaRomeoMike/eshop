@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
-import { fetchExchangeRates } from "../../redux/actions/currency";
+import { fetchExchangeRate } from "../../redux/actions/currency";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -56,7 +56,7 @@ const Header = ({ activeHeading }) => {
   });
 
   useEffect(() => {
-    dispatch(fetchExchangeRates());
+    dispatch(fetchExchangeRate());
   }, []);
 
   return (

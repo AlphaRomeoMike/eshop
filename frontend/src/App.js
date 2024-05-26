@@ -42,9 +42,10 @@ import {
   AdminDashboardUsers,
   AdminDashboardSellers,
   AdminDashboardOrders,
+  AdminCurrencyManagement,
   AdminDashboardProducts,
   AdminDashboardEvents,
-  AdminDashboardWithdraw
+  AdminDashboardWithdraw,
 } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -292,15 +293,23 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
-          path="/admin-products"
+        <Route
+          path="/admin-orders"
           element={
             <ProtectedAdminRoute>
-              <AdminDashboardProducts />
+              <AdminDashboardOrders />
             </ProtectedAdminRoute>
           }
         />
-         <Route
+        <Route
+          path="/currency-management"
+          element={
+            <ProtectedAdminRoute>
+              <AdminCurrencyManagement />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
           path="/admin-events"
           element={
             <ProtectedAdminRoute>
@@ -308,7 +317,7 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
+        <Route
           path="/admin-withdraw-request"
           element={
             <ProtectedAdminRoute>

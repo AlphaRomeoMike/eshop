@@ -1,25 +1,53 @@
-// ? fetch exchange rates from float rates API
-export const fetchExchangeRates =
+import axios from "axios";
+import { server } from "../../server";
+
+// ? fetch exchange rate from mongodb
+export const fetchExchangeRate =
   (currency = localStorage.getItem("currency") || "usd") =>
   async (dispatch) => {
     try {
-      const response = await fetch(`https://www.floatrates.com/daily/usd.json`); // ? APIs to fetch conversion rates
-      const parsedResponse = await response.json();
+      const { data } = await axios.get(
+        `${server}/currency/get-exchange-rate?code=${currency?.toUpperCase()}`
+      );
 
       dispatch({
-        type: "getExchangeRates",
-        // ? this condition will set the currency to usd if none is selected
-        payload:
-          currency === "usd"
-            ? {
-                code: "USD",
-                alphaCode: "$",
-                rate: 1,
-                inverseRate: 1,
-              }
-            : parsedResponse[currency],
+        type: "getExchangeRate",
+        payload: data,
       });
     } catch (error) {
       console.error("Error changing country:", error);
     }
   };
+
+// ? fetch exchange rates from float rates API
+export const fetchUpdatedExchangeRates = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get(
+      `${server}/currency/get-updated-exchange-rates`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    dispatch({
+      type: "getUpdatedExchangeRates",
+      payload: data.data,
+    });
+  } catch (error) {
+    console.error("Error changing country:", error);
+  }
+};
+
+// ? fetch exchange rates from mongodb
+export const fetchExchangeRates = () => async (dispatch) => {
+  try {
+    const { data } = await axios.get(`${server}/currency/get-exchange-rates`);
+
+    dispatch({
+      type: "getUpdatedExchangeRates",
+      payload: data.data,
+    });
+  } catch (error) {
+    console.error("Error changing country:", error);
+  }
+};
